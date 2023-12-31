@@ -1,0 +1,79 @@
+mutation Login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    user {
+      updatedAt
+      uid
+      name
+      image
+      createdAt
+      email
+    }
+    token
+  }
+}
+
+query user($where: UserWhereUniqueInput!) {
+  user(where: $where) {
+    uid
+    name
+    email
+  }
+}
+
+mutation registerWithProvider(
+  $registerWithProviderInput: RegisterWithProviderInput!
+) {
+  registerWithProvider(registerWithProviderInput: $registerWithProviderInput) {
+    user {
+      updatedAt
+      uid
+      name
+      image
+      email
+      createdAt
+    }
+    token
+  }
+}
+
+mutation registerWithCredentials(
+  $registerWithCredentialsInput: RegisterWithCredentialsInput!
+) {
+  registerWithCredentials(
+    registerWithCredentialsInput: $registerWithCredentialsInput
+  ) {
+    user {
+      uid
+      name
+      image
+      createdAt
+      updatedAt
+    }
+    token
+  }
+}
+
+query myItems(
+  $skip: Int
+  $take: Int
+  $orderBy: [ItemOrderByWithRelationInput!]
+  $where: ItemWhereInput
+) {
+  myItems(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    createdAt
+    id
+    name
+    user {
+      name
+    }
+  }
+}
+
+mutation createItem($createItemInput: CreateItemInput!) {
+  createItem(createItemInput: $createItemInput) {
+    name
+    id
+    createdAt
+    uid
+  }
+}
