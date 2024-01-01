@@ -16,7 +16,6 @@ import {
 import { UpdateUserInput } from './dtos/update-user.input'
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
 import { GetUserType } from '@foundation/util/types'
-import { Item } from 'src/models/items/graphql/entity/item.entity'
 import { PrismaService } from 'src/common/prisma/prisma.service'
 
 @Resolver(() => User)
@@ -81,11 +80,6 @@ export class UsersResolver {
   @Mutation(() => User)
   removeUser(@Args() args: FindUniqueUserArgs) {
     return this.usersService.remove(args)
-  }
-
-  @ResolveField(() => [Item])
-  items(@Parent() parent: User) {
-    return this.prisma.item.findMany({ where: { uid: parent.uid } })
   }
 
   @ResolveField(() => String)

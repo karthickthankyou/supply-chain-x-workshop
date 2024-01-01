@@ -8,7 +8,6 @@ type User {
   uid: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  items: [Item!]!
   email: String!
 }
 
@@ -22,22 +21,114 @@ type AuthOutput {
   token: String!
 }
 
-type Item {
+type Manufacturer {
+  uid: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  products: [Product!]!
+  warehouses: [Warehouse!]!
+}
+
+type Product {
+  description: String
   image: String
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
-  uid: String!
   name: String!
+  manufacturerId: String!
+  manufacturer: Manufacturer!
+  inventories: [Inventory!]!
+  transactions: [Transaction!]!
+}
+
+type Warehouse {
+  description: String
+  manufacturerId: String
+  distributorId: String
+  retailerId: String
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  location: Location
+  manufacturer: Manufacturer
+  distributor: Distributor
+  retailer: Retailer
+  inventories: [Inventory!]!
+  outs: [Transaction!]!
+  ins: [Transaction!]!
+}
+
+type Distributor {
+  uid: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   user: User!
+  warehouses: [Warehouse!]!
+}
+
+type Retailer {
+  updatedAt: DateTime!
+  uid: String!
+  createdAt: DateTime!
+  user: User!
+  warehouses: [Warehouse!]!
+}
+
+type Inventory {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  productId: Int!
+  warehouseId: Int!
+  quantity: Int!
+  product: Product!
+  warehouse: Warehouse!
+}
+
+type Transaction {
+  fromWarehouseId: Int
+  toWarehouseId: Int
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  productId: Int!
+  quantity: Int!
+  product: Product!
+  fromWarehouse: Warehouse
+  toWarehouse: Warehouse
+}
+
+type Location {
+  latitude: Float!
+  longitude: Float!
+  id: Int!
+  address: String!
+  warehouseId: Int!
+  warehouse: Warehouse!
 }
 
 type Query {
   users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
   user(where: UserWhereUniqueInput!): User!
-  items(distinct: [ItemScalarFieldEnum!], where: ItemWhereInput, orderBy: [ItemOrderByWithRelationInput!], cursor: ItemWhereUniqueInput, take: Int, skip: Int): [Item!]!
-  myItems(distinct: [ItemScalarFieldEnum!], where: ItemWhereInput, orderBy: [ItemOrderByWithRelationInput!], cursor: ItemWhereUniqueInput, take: Int, skip: Int): [Item!]!
-  item(where: ItemWhereUniqueInput!): Item!
+  manufacturers(distinct: [ManufacturerScalarFieldEnum!], where: ManufacturerWhereInput, orderBy: [ManufacturerOrderByWithRelationInput!], cursor: ManufacturerWhereUniqueInput, take: Int, skip: Int): [Manufacturer!]!
+  manufacturer(where: ManufacturerWhereUniqueInput!): Manufacturer!
+  distributors(distinct: [DistributorScalarFieldEnum!], where: DistributorWhereInput, orderBy: [DistributorOrderByWithRelationInput!], cursor: DistributorWhereUniqueInput, take: Int, skip: Int): [Distributor!]!
+  distributor(where: DistributorWhereUniqueInput!): Distributor!
+  retailers(distinct: [RetailerScalarFieldEnum!], where: RetailerWhereInput, orderBy: [RetailerOrderByWithRelationInput!], cursor: RetailerWhereUniqueInput, take: Int, skip: Int): [Retailer!]!
+  retailer(where: RetailerWhereUniqueInput!): Retailer!
+  products(distinct: [ProductScalarFieldEnum!], where: ProductWhereInput, orderBy: [ProductOrderByWithRelationInput!], cursor: ProductWhereUniqueInput, take: Int, skip: Int): [Product!]!
+  product(where: ProductWhereUniqueInput!): Product!
+  warehouses(distinct: [WarehouseScalarFieldEnum!], where: WarehouseWhereInput, orderBy: [WarehouseOrderByWithRelationInput!], cursor: WarehouseWhereUniqueInput, take: Int, skip: Int): [Warehouse!]!
+  warehouse(where: WarehouseWhereUniqueInput!): Warehouse!
+  locations(distinct: [LocationScalarFieldEnum!], where: LocationWhereInput, orderBy: [LocationOrderByWithRelationInput!], cursor: LocationWhereUniqueInput, take: Int, skip: Int): [Location!]!
+  location(where: LocationWhereUniqueInput!): Location!
+  inventories(distinct: [InventoryScalarFieldEnum!], where: InventoryWhereInput, orderBy: [InventoryOrderByWithRelationInput!], cursor: InventoryWhereUniqueInput, take: Int, skip: Int): [Inventory!]!
+  inventory(where: InventoryWhereUniqueInput!): Inventory!
+  transactions(distinct: [TransactionScalarFieldEnum!], where: TransactionWhereInput, orderBy: [TransactionOrderByWithRelationInput!], cursor: TransactionWhereUniqueInput, take: Int, skip: Int): [Transaction!]!
+  transaction(where: TransactionWhereUniqueInput!): Transaction!
 }
 
 enum UserScalarFieldEnum {
@@ -49,7 +140,9 @@ enum UserScalarFieldEnum {
 }
 
 input UserWhereInput {
-  Item: ItemListRelationFilter
+  Manufacturer: ManufacturerRelationFilter
+  Distributor: DistributorRelationFilter
+  Retailer: RetailerRelationFilter
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
@@ -59,41 +152,21 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
 }
 
-input ItemListRelationFilter {
-  every: ItemWhereInput
-  some: ItemWhereInput
-  none: ItemWhereInput
+input ManufacturerRelationFilter {
+  is: ManufacturerWhereInput
+  isNot: ManufacturerWhereInput
 }
 
-input ItemWhereInput {
-  image: String
-  id: IntFilter
+input ManufacturerWhereInput {
+  uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
-  name: StringFilter
-  uid: StringFilter
   user: UserRelationFilter
-  AND: [ItemWhereInput!]
-  OR: [ItemWhereInput!]
-  NOT: [ItemWhereInput!]
-}
-
-input IntFilter {
-  equals: Int
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-}
-
-input DateTimeFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
+  Products: ProductListRelationFilter
+  Warehouses: WarehouseListRelationFilter
+  AND: [ManufacturerWhereInput!]
+  OR: [ManufacturerWhereInput!]
+  NOT: [ManufacturerWhereInput!]
 }
 
 input StringFilter {
@@ -116,9 +189,186 @@ enum QueryMode {
   insensitive
 }
 
+input DateTimeFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+}
+
 input UserRelationFilter {
   is: UserWhereInput
   isNot: UserWhereInput
+}
+
+input ProductListRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
+}
+
+input ProductWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  name: StringFilter
+  description: StringFilter
+  image: StringFilter
+  manufacturerId: StringFilter
+  Manufacturer: ManufacturerRelationFilter
+  Inventories: InventoryListRelationFilter
+  Transactions: TransactionListRelationFilter
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+}
+
+input IntFilter {
+  equals: Int
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+}
+
+input InventoryListRelationFilter {
+  every: InventoryWhereInput
+  some: InventoryWhereInput
+  none: InventoryWhereInput
+}
+
+input InventoryWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  productId: IntFilter
+  warehouseId: IntFilter
+  quantity: IntFilter
+  product: ProductRelationFilter
+  warehouse: WarehouseRelationFilter
+  AND: [InventoryWhereInput!]
+  OR: [InventoryWhereInput!]
+  NOT: [InventoryWhereInput!]
+}
+
+input ProductRelationFilter {
+  is: ProductWhereInput
+  isNot: ProductWhereInput
+}
+
+input WarehouseRelationFilter {
+  is: WarehouseWhereInput
+  isNot: WarehouseWhereInput
+}
+
+input WarehouseWhereInput {
+  description: StringFilter
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  name: StringFilter
+  manufacturerId: StringFilter
+  distributorId: StringFilter
+  retailerId: StringFilter
+  location: LocationRelationFilter
+  Manufacturer: ManufacturerRelationFilter
+  Distributor: DistributorRelationFilter
+  Retailer: RetailerRelationFilter
+  Inventories: InventoryListRelationFilter
+  outs: TransactionListRelationFilter
+  ins: TransactionListRelationFilter
+  AND: [WarehouseWhereInput!]
+  OR: [WarehouseWhereInput!]
+  NOT: [WarehouseWhereInput!]
+}
+
+input LocationRelationFilter {
+  is: LocationWhereInput
+  isNot: LocationWhereInput
+}
+
+input LocationWhereInput {
+  id: IntFilter
+  latitude: FloatFilter
+  longitude: FloatFilter
+  address: StringFilter
+  warehouseId: IntFilter
+  Warehouse: WarehouseRelationFilter
+  AND: [LocationWhereInput!]
+  OR: [LocationWhereInput!]
+  NOT: [LocationWhereInput!]
+}
+
+input FloatFilter {
+  equals: Int
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: Int
+}
+
+input DistributorRelationFilter {
+  is: DistributorWhereInput
+  isNot: DistributorWhereInput
+}
+
+input DistributorWhereInput {
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  user: UserRelationFilter
+  Warehouses: WarehouseListRelationFilter
+  AND: [DistributorWhereInput!]
+  OR: [DistributorWhereInput!]
+  NOT: [DistributorWhereInput!]
+}
+
+input WarehouseListRelationFilter {
+  every: WarehouseWhereInput
+  some: WarehouseWhereInput
+  none: WarehouseWhereInput
+}
+
+input RetailerRelationFilter {
+  is: RetailerWhereInput
+  isNot: RetailerWhereInput
+}
+
+input RetailerWhereInput {
+  uid: StringFilter
+  updatedAt: DateTimeFilter
+  createdAt: DateTimeFilter
+  user: UserRelationFilter
+  Warehouses: WarehouseListRelationFilter
+  AND: [RetailerWhereInput!]
+  OR: [RetailerWhereInput!]
+  NOT: [RetailerWhereInput!]
+}
+
+input TransactionListRelationFilter {
+  every: TransactionWhereInput
+  some: TransactionWhereInput
+  none: TransactionWhereInput
+}
+
+input TransactionWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  productId: IntFilter
+  fromWarehouseId: IntFilter
+  toWarehouseId: IntFilter
+  quantity: IntFilter
+  product: ProductRelationFilter
+  fromWarehouse: WarehouseRelationFilter
+  toWarehouse: WarehouseRelationFilter
+  AND: [TransactionWhereInput!]
+  OR: [TransactionWhereInput!]
+  NOT: [TransactionWhereInput!]
 }
 
 input UserOrderByWithRelationInput {
@@ -127,7 +377,9 @@ input UserOrderByWithRelationInput {
   updatedAt: SortOrder
   name: SortOrder
   image: SortOrder
-  Item: ItemOrderByRelationAggregateInput
+  Manufacturer: ManufacturerOrderByWithRelationInput
+  Distributor: DistributorOrderByWithRelationInput
+  Retailer: RetailerOrderByWithRelationInput
 }
 
 enum SortOrder {
@@ -135,33 +387,210 @@ enum SortOrder {
   desc
 }
 
-input ItemOrderByRelationAggregateInput {
+input ManufacturerOrderByWithRelationInput {
+  uid: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  Products: ProductOrderByRelationAggregateInput
+  Warehouses: WarehouseOrderByRelationAggregateInput
+}
+
+input ProductOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input WarehouseOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input DistributorOrderByWithRelationInput {
+  uid: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  Warehouses: WarehouseOrderByRelationAggregateInput
+}
+
+input RetailerOrderByWithRelationInput {
+  updatedAt: SortOrder
+  uid: SortOrder
+  createdAt: SortOrder
+  user: UserOrderByWithRelationInput
+  Warehouses: WarehouseOrderByRelationAggregateInput
 }
 
 input UserWhereUniqueInput {
   uid: String!
 }
 
-enum ItemScalarFieldEnum {
+enum ManufacturerScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+}
+
+input ManufacturerWhereUniqueInput {
+  uid: String!
+}
+
+enum DistributorScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+}
+
+input DistributorWhereUniqueInput {
+  uid: String!
+}
+
+enum RetailerScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+}
+
+input RetailerWhereUniqueInput {
+  uid: String!
+}
+
+enum ProductScalarFieldEnum {
   id
   createdAt
   updatedAt
   name
+  description
   image
-  uid
+  manufacturerId
 }
 
-input ItemOrderByWithRelationInput {
+input ProductOrderByWithRelationInput {
   id: SortOrder
   createdAt: SortOrder
   updatedAt: SortOrder
   name: SortOrder
-  uid: SortOrder
-  user: UserOrderByWithRelationInput
+  description: SortOrder
+  image: SortOrder
+  manufacturerId: SortOrder
+  Manufacturer: ManufacturerOrderByWithRelationInput
+  Inventories: InventoryOrderByRelationAggregateInput
+  Transactions: TransactionOrderByRelationAggregateInput
 }
 
-input ItemWhereUniqueInput {
+input InventoryOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input TransactionOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ProductWhereUniqueInput {
+  id: Int!
+}
+
+enum WarehouseScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  name
+  description
+  manufacturerId
+  distributorId
+  retailerId
+}
+
+input WarehouseOrderByWithRelationInput {
+  description: SortOrder
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  name: SortOrder
+  manufacturerId: SortOrder
+  distributorId: SortOrder
+  retailerId: SortOrder
+  location: LocationOrderByWithRelationInput
+  Manufacturer: ManufacturerOrderByWithRelationInput
+  Distributor: DistributorOrderByWithRelationInput
+  Retailer: RetailerOrderByWithRelationInput
+  Inventories: InventoryOrderByRelationAggregateInput
+  outs: TransactionOrderByRelationAggregateInput
+  ins: TransactionOrderByRelationAggregateInput
+}
+
+input LocationOrderByWithRelationInput {
+  id: SortOrder
+  latitude: SortOrder
+  longitude: SortOrder
+  address: SortOrder
+  warehouseId: SortOrder
+  Warehouse: WarehouseOrderByWithRelationInput
+}
+
+input WarehouseWhereUniqueInput {
+  id: Int!
+}
+
+enum LocationScalarFieldEnum {
+  id
+  latitude
+  longitude
+  address
+  warehouseId
+}
+
+input LocationWhereUniqueInput {
+  id: Int!
+}
+
+enum InventoryScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  productId
+  warehouseId
+  quantity
+}
+
+input InventoryOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  productId: SortOrder
+  warehouseId: SortOrder
+  quantity: SortOrder
+  product: ProductOrderByWithRelationInput
+  warehouse: WarehouseOrderByWithRelationInput
+}
+
+input InventoryWhereUniqueInput {
+  id: Int!
+}
+
+enum TransactionScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  productId
+  fromWarehouseId
+  toWarehouseId
+  quantity
+}
+
+input TransactionOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  productId: SortOrder
+  fromWarehouseId: SortOrder
+  toWarehouseId: SortOrder
+  quantity: SortOrder
+  product: ProductOrderByWithRelationInput
+  fromWarehouse: WarehouseOrderByWithRelationInput
+  toWarehouse: WarehouseOrderByWithRelationInput
+}
+
+input TransactionWhereUniqueInput {
   id: Int!
 }
 
@@ -171,9 +600,30 @@ type Mutation {
   login(loginInput: LoginInput!): AuthOutput!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(where: UserWhereUniqueInput!): User!
-  createItem(createItemInput: CreateItemInput!): Item!
-  updateItem(updateItemInput: UpdateItemInput!): Item!
-  removeItem(where: ItemWhereUniqueInput!): Item!
+  createManufacturer(createManufacturerInput: CreateManufacturerInput!): Manufacturer!
+  updateManufacturer(updateManufacturerInput: UpdateManufacturerInput!): Manufacturer!
+  removeManufacturer(where: ManufacturerWhereUniqueInput!): Manufacturer!
+  createDistributor(createDistributorInput: CreateDistributorInput!): Distributor!
+  updateDistributor(updateDistributorInput: UpdateDistributorInput!): Distributor!
+  removeDistributor(where: DistributorWhereUniqueInput!): Distributor!
+  createRetailer(createRetailerInput: CreateRetailerInput!): Retailer!
+  updateRetailer(updateRetailerInput: UpdateRetailerInput!): Retailer!
+  removeRetailer(where: RetailerWhereUniqueInput!): Retailer!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(where: ProductWhereUniqueInput!): Product!
+  createWarehouse(createWarehouseInput: CreateWarehouseInput!): Warehouse!
+  updateWarehouse(updateWarehouseInput: UpdateWarehouseInput!): Warehouse!
+  removeWarehouse(where: WarehouseWhereUniqueInput!): Warehouse!
+  createLocation(createLocationInput: CreateLocationInput!): Location!
+  updateLocation(updateLocationInput: UpdateLocationInput!): Location!
+  removeLocation(where: LocationWhereUniqueInput!): Location!
+  createInventory(createInventoryInput: CreateInventoryInput!): Inventory!
+  updateInventory(updateInventoryInput: UpdateInventoryInput!): Inventory!
+  removeInventory(where: InventoryWhereUniqueInput!): Inventory!
+  createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!
+  updateTransaction(updateTransactionInput: UpdateTransactionInput!): Transaction!
+  removeTransaction(where: TransactionWhereUniqueInput!): Transaction!
 }
 
 input RegisterWithProviderInput {
@@ -204,11 +654,109 @@ input UpdateUserInput {
   uid: String!
 }
 
-input CreateItemInput {
-  name: String!
+input CreateManufacturerInput {
+  uid: String!
 }
 
-input UpdateItemInput {
+input UpdateManufacturerInput {
+  uid: String!
+}
+
+input CreateDistributorInput {
+  uid: String!
+}
+
+input UpdateDistributorInput {
+  uid: String!
+}
+
+input CreateRetailerInput {
+  uid: String!
+}
+
+input UpdateRetailerInput {
+  uid: String!
+}
+
+input CreateProductInput {
+  description: String
+  image: String
+  name: String!
+  manufacturerId: String!
+}
+
+input UpdateProductInput {
+  description: String
+  image: String
   name: String
+  manufacturerId: String
+  id: Int!
+}
+
+input CreateWarehouseInput {
+  description: String
+  manufacturerId: String
+  distributorId: String
+  retailerId: String
+  name: String!
+  address: CreateLocationInputWithoutWarehouseId!
+}
+
+input CreateLocationInputWithoutWarehouseId {
+  latitude: Float!
+  longitude: Float!
+  address: String!
+}
+
+input UpdateWarehouseInput {
+  description: String
+  manufacturerId: String
+  distributorId: String
+  retailerId: String
+  name: String
+  address: CreateLocationInputWithoutWarehouseId
+  id: Int!
+}
+
+input CreateLocationInput {
+  latitude: Float!
+  longitude: Float!
+  address: String!
+  warehouseId: Int!
+}
+
+input UpdateLocationInput {
+  latitude: Float
+  longitude: Float
+  address: String
+  warehouseId: Int
+  id: Int!
+}
+
+input CreateInventoryInput {
+  productId: Int!
+  warehouseId: Int!
+  quantity: Int!
+}
+
+input UpdateInventoryInput {
+  productId: Int
+  warehouseId: Int
+  quantity: Int
+  id: Int!
+}
+
+input CreateTransactionInput {
+  fromWarehouseId: Int
+  toWarehouseId: Int
+  productId: Int!
+  quantity: Int!
+}
+
+input UpdateTransactionInput {
+  fromWarehouseId: Int
+  toWarehouseId: Int
+  productId: Int
+  quantity: Int
   id: Int!
 }

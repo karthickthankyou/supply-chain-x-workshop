@@ -5,7 +5,9 @@ import {
   RestrictProperties,
   StringFilter,
 } from 'src/common/dtos/common.input'
-import { ItemListRelationFilter } from 'src/models/items/graphql/dtos/where.args'
+import { DistributorRelationFilter } from 'src/models/distributors/graphql/dtos/where.args'
+import { ManufacturerRelationFilter } from 'src/models/manufacturers/graphql/dtos/where.args'
+import { RetailerRelationFilter } from 'src/models/retailers/graphql/dtos/where.args'
 
 @InputType()
 export class UserWhereUniqueInput {
@@ -23,8 +25,9 @@ export class UserWhereInputStrict
       >
     >
 {
-  Item: ItemListRelationFilter
-
+  Manufacturer: ManufacturerRelationFilter
+  Distributor: DistributorRelationFilter
+  Retailer: RetailerRelationFilter
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
