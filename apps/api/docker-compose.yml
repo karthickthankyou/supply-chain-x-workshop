@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    container_name: foundation_db
+    container_name: supplychainx_db
     image: postgres
     restart: always
     ports:
@@ -12,9 +12,9 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - db_data_foundationx:/var/lib/postgresql/data
+      - db_data_supplychainx:/var/lib/postgresql/data
   pgadmin:
-    container_name: foundation_pgadmin
+    container_name: supplychainx_pgadmin
     image: dpage/pgadmin4
     restart: always
     environment:
@@ -25,4 +25,4 @@ services:
     depends_on:
       - db
 volumes:
-  db_data_foundationx:
+  db_data_supplychainx:
