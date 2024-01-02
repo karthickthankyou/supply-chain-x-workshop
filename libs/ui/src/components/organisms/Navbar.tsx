@@ -18,9 +18,9 @@ export const Navbar = () => {
             </SheetHeader>
 
             <div className="flex flex-col gap-2 mt-4 mb-8">
-              <Link href="/myItems">
+              <Link href="/manufacturer">
                 <div className="flex items-center gap-2">
-                  <LibrarySquare className="w-4 h-4" /> My Items
+                  <LibrarySquare className="w-4 h-4" /> Manufacturer
                 </div>
               </Link>
             </div>
