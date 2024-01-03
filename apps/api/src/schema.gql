@@ -122,6 +122,7 @@ type Query {
   products(distinct: [ProductScalarFieldEnum!], where: ProductWhereInput, orderBy: [ProductOrderByWithRelationInput!], cursor: ProductWhereUniqueInput, take: Int, skip: Int): [Product!]!
   product(where: ProductWhereUniqueInput!): Product!
   warehouses(distinct: [WarehouseScalarFieldEnum!], where: WarehouseWhereInput, orderBy: [WarehouseOrderByWithRelationInput!], cursor: WarehouseWhereUniqueInput, take: Int, skip: Int): [Warehouse!]!
+  myWarehouses(distinct: [WarehouseScalarFieldEnum!], where: WarehouseWhereInput, orderBy: [WarehouseOrderByWithRelationInput!], cursor: WarehouseWhereUniqueInput, take: Int, skip: Int): [Warehouse!]!
   warehouse(where: WarehouseWhereUniqueInput!): Warehouse!
   locations(distinct: [LocationScalarFieldEnum!], where: LocationWhereInput, orderBy: [LocationOrderByWithRelationInput!], cursor: LocationWhereUniqueInput, take: Int, skip: Int): [Location!]!
   location(where: LocationWhereUniqueInput!): Location!

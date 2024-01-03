@@ -6,7 +6,7 @@ import { Link } from '../molecules/CustomLink'
 export const ManufacturerMenu = ({ manufacturer }: ManufacturerQuery) => {
   return (
     <div className="flex flex-col w-full max-w-xs gap-2">
-      <DisplayUser size="lg" rounded="lg" />
+      <DisplayUser size="lg" rounded="lg" className="mb-4" />
 
       <div className="flex flex-col gap-2">
         <Link href="/manufacturer">Dashboard</Link>

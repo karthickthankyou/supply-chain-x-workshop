@@ -1,14 +1,16 @@
 import { getAuth } from '@foundation/network/src/auth/authOptions'
 import Image from 'next/image'
 import { cn } from '../../util'
+import { BaseComponent } from '@foundation/util/types'
 
 export const DisplayUser = async ({
   rounded = 'full',
   size = 'sm',
+  className,
 }: {
   rounded?: 'full' | 'lg'
   size?: 'sm' | 'lg'
-}) => {
+} & BaseComponent) => {
   const session = await getAuth()
 
   if (!session?.user) {
@@ -19,7 +21,7 @@ export const DisplayUser = async ({
   const sizeCls = size === 'lg' ? 'w-full' : 'w-16'
 
   return (
-    <div>
+    <div className={className}>
       {session?.user?.image ? (
         <Image
           className={cn(
@@ -43,7 +45,7 @@ export const DisplayUser = async ({
           {session?.user?.name?.charAt(0)}
         </div>
       )}
-      <div className={`text-xl font-light capitalize`}>
+      <div className={`text-xl font-light capitalize mt-2`}>
         {session?.user?.name}
       </div>
       <div className="text-xs text-gray-500">{session?.user?.uid}</div>

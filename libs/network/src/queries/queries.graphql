@@ -79,3 +79,71 @@ mutation createManufacturer(
     uid
   }
 }
+
+fragment TransactionDetails on Transaction {
+  id
+  quantity
+  toWarehouse {
+    name
+    id
+  }
+  fromWarehouse {
+    name
+    id
+  }
+  createdAt
+  product {
+    name
+    image
+    id
+  }
+}
+
+fragment WarehouseDetails on Warehouse {
+  id
+  name
+  description
+  createdAt
+  location {
+    address
+    latitude
+    longitude
+  }
+  ins {
+    ...TransactionDetails
+  }
+  outs {
+    ...TransactionDetails
+  }
+  inventories {
+    quantity
+    product {
+      name
+      image
+      id
+    }
+  }
+}
+
+query myWarehouses(
+  $skip: Int
+  $take: Int
+  $orderBy: [WarehouseOrderByWithRelationInput!]
+  $where: WarehouseWhereInput
+) {
+  myWarehouses(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    ...WarehouseDetails
+  }
+}
+
+query warehouse($where: WarehouseWhereUniqueInput!) {
+  warehouse(where: $where) {
+    ...WarehouseDetails
+  }
+}
+
+mutation createWarehouse($createWarehouseInput: CreateWarehouseInput!) {
+  createWarehouse(createWarehouseInput: $createWarehouseInput) {
+    id
+  }
+}
