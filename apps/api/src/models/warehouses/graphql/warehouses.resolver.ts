@@ -122,7 +122,7 @@ export class WarehousesResolver {
   @ResolveField(() => [Inventory])
   inventories(@Parent() warehouse: Warehouse) {
     return this.prisma.inventory.findMany({
-      where: { warehouseId: warehouse.id },
+      where: { warehouseId: warehouse.id, quantity: { gt: 0 } },
     })
   }
 
