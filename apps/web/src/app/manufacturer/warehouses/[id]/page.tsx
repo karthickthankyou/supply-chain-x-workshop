@@ -3,6 +3,7 @@ import {
   WarehouseDocument,
   namedOperations,
 } from '@foundation/network/src/queries/generated'
+import { Warehouse } from '@foundation/ui/src/components/templates/Warehouse'
 
 export default async function ProductPage({
   params,
@@ -25,5 +26,5 @@ export default async function ProductPage({
     return <div>Warehouse not found.</div>
   }
 
-  return <div>name: {data.warehouse.name}</div>
+  return <Warehouse warehouse={data.warehouse} showUpsertInventory />
 }

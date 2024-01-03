@@ -335,6 +335,7 @@ export type Mutation = {
   createTransaction: Transaction
   createWarehouse: Warehouse
   login: AuthOutput
+  reduceInventory: Inventory
   registerWithCredentials: AuthOutput
   registerWithProvider: AuthOutput
   removeDistributor: Distributor
@@ -346,6 +347,7 @@ export type Mutation = {
   removeTransaction: Transaction
   removeUser: User
   removeWarehouse: Warehouse
+  transferInventory: Inventory
   updateDistributor: Distributor
   updateInventory: Inventory
   updateLocation: Location
@@ -393,6 +395,12 @@ export type MutationLoginArgs = {
   loginInput: LoginInput
 }
 
+export type MutationReduceInventoryArgs = {
+  productId: Scalars['Int']['input']
+  quantity: Scalars['Int']['input']
+  warehouseId: Scalars['Int']['input']
+}
+
 export type MutationRegisterWithCredentialsArgs = {
   registerWithCredentialsInput: RegisterWithCredentialsInput
 }
@@ -435,6 +443,13 @@ export type MutationRemoveUserArgs = {
 
 export type MutationRemoveWarehouseArgs = {
   where: WarehouseWhereUniqueInput
+}
+
+export type MutationTransferInventoryArgs = {
+  fromWarehouseId: Scalars['Int']['input']
+  productId: Scalars['Int']['input']
+  quantity: Scalars['Int']['input']
+  toWarehouseId: Scalars['Int']['input']
 }
 
 export type MutationUpdateDistributorArgs = {
@@ -1475,6 +1490,38 @@ export type ProductQuery = {
   }
 }
 
+export type CreateInventoryMutationVariables = Exact<{
+  createInventoryInput: CreateInventoryInput
+}>
+
+export type CreateInventoryMutation = {
+  __typename?: 'Mutation'
+  createInventory: { __typename?: 'Inventory'; id: number }
+}
+
+export type TransferInventoryMutationVariables = Exact<{
+  fromWarehouseId: Scalars['Int']['input']
+  toWarehouseId: Scalars['Int']['input']
+  productId: Scalars['Int']['input']
+  quantity: Scalars['Int']['input']
+}>
+
+export type TransferInventoryMutation = {
+  __typename?: 'Mutation'
+  transferInventory: { __typename?: 'Inventory'; id: number }
+}
+
+export type ReduceInventoryMutationVariables = Exact<{
+  warehouseId: Scalars['Int']['input']
+  productId: Scalars['Int']['input']
+  quantity: Scalars['Int']['input']
+}>
+
+export type ReduceInventoryMutation = {
+  __typename?: 'Mutation'
+  reduceInventory: { __typename?: 'Inventory'; id: number }
+}
+
 export const namedOperations = {
   Query: {
     user: 'user',
@@ -1491,6 +1538,9 @@ export const namedOperations = {
     createManufacturer: 'createManufacturer',
     createWarehouse: 'createWarehouse',
     createProduct: 'createProduct',
+    createInventory: 'createInventory',
+    transferInventory: 'transferInventory',
+    reduceInventory: 'reduceInventory',
   },
   Fragment: {
     TransactionDetails: 'TransactionDetails',
@@ -2942,3 +2992,254 @@ export const ProductDocument = {
     },
   ],
 } as unknown as DocumentNode<ProductQuery, ProductQueryVariables>
+export const CreateInventoryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createInventory' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createInventoryInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateInventoryInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createInventory' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createInventoryInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createInventoryInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateInventoryMutation,
+  CreateInventoryMutationVariables
+>
+export const TransferInventoryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'transferInventory' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'fromWarehouseId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'toWarehouseId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'productId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'quantity' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'transferInventory' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'fromWarehouseId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'fromWarehouseId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'toWarehouseId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'toWarehouseId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'productId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'productId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'quantity' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'quantity' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  TransferInventoryMutation,
+  TransferInventoryMutationVariables
+>
+export const ReduceInventoryDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'reduceInventory' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'warehouseId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'productId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'quantity' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'reduceInventory' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'warehouseId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'warehouseId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'productId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'productId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'quantity' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'quantity' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ReduceInventoryMutation,
+  ReduceInventoryMutationVariables
+>

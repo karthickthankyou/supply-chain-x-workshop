@@ -6,6 +6,7 @@ import {
 import { PrismaService } from 'src/common/prisma/prisma.service'
 import { CreateInventoryInput } from './dtos/create-inventory.input'
 import { UpdateInventoryInput } from './dtos/update-inventory.input'
+import { Inventory } from './entity/inventory.entity'
 
 @Injectable()
 export class InventoriesService {
@@ -142,5 +143,71 @@ export class InventoriesService {
 
   remove(args: FindUniqueInventoryArgs) {
     return this.prisma.inventory.delete(args)
+  }
+
+  async transferInventory(
+    fromWarehouseId: number,
+    toWarehouseId: number,
+    productId: number,
+    quantity: number,
+    uid: string,
+  ): Promise<Inventory | null> {
+    return this.prisma.$transaction(async (prisma) => {
+      await this.checkWarehouseOwner({
+        uid,
+        warehouseId: fromWarehouseId,
+      })
+      // 1. Check sender inventory
+      const senderInventory = await prisma.inventory.findFirst({
+        where: { productId, warehouseId: fromWarehouseId },
+      })
+
+      if (!senderInventory) {
+        throw new Error('Sender inventory does not exist')
+      }
+
+      if (senderInventory.quantity < quantity) {
+        throw new Error('Insufficient inventory for transfer')
+      }
+
+      // 2. Update sender inventory
+      await prisma.inventory.update({
+        where: { id: senderInventory.id },
+        data: { quantity: { decrement: quantity } },
+      })
+
+      // 3. Check if receiver inventory exists
+      const receiverInventory = await prisma.inventory.findFirst({
+        where: { productId, warehouseId: toWarehouseId },
+      })
+
+      // 4. Update or create receiver inventory
+      if (receiverInventory) {
+        await prisma.inventory.update({
+          where: { id: receiverInventory.id },
+          data: { quantity: { increment: quantity } },
+        })
+      } else {
+        await prisma.inventory.create({
+          data: {
+            quantity,
+            productId,
+            warehouseId: toWarehouseId,
+          },
+        })
+      }
+
+      await prisma.transaction.create({
+        data: {
+          quantity,
+          fromWarehouseId,
+          toWarehouseId,
+          productId,
+        },
+      })
+
+      // 5. Return sender inventory after successful transfer
+      return senderInventory
+    })
   }
 }

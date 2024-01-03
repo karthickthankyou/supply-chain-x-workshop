@@ -216,3 +216,39 @@ query product($where: ProductWhereUniqueInput!) {
     }
   }
 }
+
+mutation createInventory($createInventoryInput: CreateInventoryInput!) {
+  createInventory(createInventoryInput: $createInventoryInput) {
+    id
+  }
+}
+
+mutation transferInventory(
+  $fromWarehouseId: Int!
+  $toWarehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  transferInventory(
+    fromWarehouseId: $fromWarehouseId
+    toWarehouseId: $toWarehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
+    id
+  }
+}
+
+mutation reduceInventory(
+  $warehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  reduceInventory(
+    warehouseId: $warehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
+    id
+  }
+}
