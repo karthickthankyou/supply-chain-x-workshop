@@ -71,6 +71,20 @@ query Manufacturer($where: ManufacturerWhereUniqueInput!) {
     }
   }
 }
+query distributor($where: DistributorWhereUniqueInput!) {
+  distributor(where: $where) {
+    uid
+    createdAt
+    user {
+      image
+      name
+    }
+    warehouses {
+      name
+      id
+    }
+  }
+}
 
 mutation createManufacturer(
   $createManufacturerInput: CreateManufacturerInput!
@@ -250,5 +264,11 @@ mutation reduceInventory(
     quantity: $quantity
   ) {
     id
+  }
+}
+
+mutation createDistributor($createDistributorInput: CreateDistributorInput!) {
+  createDistributor(createDistributorInput: $createDistributorInput) {
+    uid
   }
 }

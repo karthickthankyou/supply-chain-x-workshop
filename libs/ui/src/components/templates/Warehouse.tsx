@@ -36,14 +36,18 @@ export const Warehouse = ({
           ))}
         </div>
       </div>
-      <div>
-        <div>Ins</div>
-        <TransactionsTable transactions={warehouse.ins} />
-      </div>
-      <div>
-        <div>Outs</div>
-        <TransactionsTable transactions={warehouse.outs} />
-      </div>
+      {warehouse.ins.length ? (
+        <div>
+          <div>Ins</div>
+          <TransactionsTable transactions={warehouse.ins} />
+        </div>
+      ) : null}
+      {warehouse.outs.length ? (
+        <div>
+          <div>Outs</div>
+          <TransactionsTable transactions={warehouse.outs} />
+        </div>
+      ) : null}
     </div>
   )
 }

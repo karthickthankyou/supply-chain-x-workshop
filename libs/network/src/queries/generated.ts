@@ -1156,6 +1156,21 @@ export type ManufacturerQuery = {
   }
 }
 
+export type DistributorQueryVariables = Exact<{
+  where: DistributorWhereUniqueInput
+}>
+
+export type DistributorQuery = {
+  __typename?: 'Query'
+  distributor: {
+    __typename?: 'Distributor'
+    uid: string
+    createdAt: any
+    user: { __typename?: 'User'; image?: string | null; name?: string | null }
+    warehouses: Array<{ __typename?: 'Warehouse'; name: string; id: number }>
+  }
+}
+
 export type CreateManufacturerMutationVariables = Exact<{
   createManufacturerInput: CreateManufacturerInput
 }>
@@ -1522,10 +1537,20 @@ export type ReduceInventoryMutation = {
   reduceInventory: { __typename?: 'Inventory'; id: number }
 }
 
+export type CreateDistributorMutationVariables = Exact<{
+  createDistributorInput: CreateDistributorInput
+}>
+
+export type CreateDistributorMutation = {
+  __typename?: 'Mutation'
+  createDistributor: { __typename?: 'Distributor'; uid: string }
+}
+
 export const namedOperations = {
   Query: {
     user: 'user',
     Manufacturer: 'Manufacturer',
+    distributor: 'distributor',
     myWarehouses: 'myWarehouses',
     warehouse: 'warehouse',
     myProducts: 'myProducts',
@@ -1541,6 +1566,7 @@ export const namedOperations = {
     createInventory: 'createInventory',
     transferInventory: 'transferInventory',
     reduceInventory: 'reduceInventory',
+    createDistributor: 'createDistributor',
   },
   Fragment: {
     TransactionDetails: 'TransactionDetails',
@@ -2093,6 +2119,80 @@ export const ManufacturerDocument = {
     },
   ],
 } as unknown as DocumentNode<ManufacturerQuery, ManufacturerQueryVariables>
+export const DistributorDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'distributor' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'DistributorWhereUniqueInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'distributor' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'warehouses' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<DistributorQuery, DistributorQueryVariables>
 export const CreateManufacturerDocument = {
   kind: 'Document',
   definitions: [
@@ -3242,4 +3342,58 @@ export const ReduceInventoryDocument = {
 } as unknown as DocumentNode<
   ReduceInventoryMutation,
   ReduceInventoryMutationVariables
+>
+export const CreateDistributorDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createDistributor' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createDistributorInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateDistributorInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createDistributor' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createDistributorInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createDistributorInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateDistributorMutation,
+  CreateDistributorMutationVariables
 >
