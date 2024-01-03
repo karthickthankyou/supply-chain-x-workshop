@@ -2,7 +2,6 @@ import { RetailerQuery } from '@foundation/network/src/queries/generated'
 import { StatCard } from '../molecules/StatCard'
 
 export const RetailerDashboard = ({ retailer }: RetailerQuery) => {
-  console.log('retailer ', retailer)
   return (
     <div>
       Dashboard

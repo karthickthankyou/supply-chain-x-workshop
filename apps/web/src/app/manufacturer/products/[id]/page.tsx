@@ -3,6 +3,7 @@ import {
   ProductDocument,
   namedOperations,
 } from '@foundation/network/src/queries/generated'
+import { ProductFlow } from '@foundation/ui/src/components/organisms/ProductFlow'
 
 import { ProductDetails } from '@foundation/ui/src/components/organisms/ProductDetails'
 
@@ -30,6 +31,7 @@ export default async function ProductPage({
   return (
     <div className="space-y-6">
       <ProductDetails product={data.product} />
+      <ProductFlow product={data.product} />
     </div>
   )
 }
