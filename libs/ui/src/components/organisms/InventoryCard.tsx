@@ -13,7 +13,7 @@ export const InventoryCard = ({
   return (
     <div className="flex overflow-hidden border border-white rounded-lg shadow-lg">
       <Image
-        src={inventory.product.image || '/empty-product.jpeg'}
+        src={inventory.product.image || '/no-image.jpeg'}
         width={200}
         height={200}
         className="object-cover w-36 h-36 "

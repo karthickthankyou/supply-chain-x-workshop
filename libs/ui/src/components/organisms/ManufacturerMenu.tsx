@@ -28,7 +28,6 @@ export const ManufacturerMenu = ({ manufacturer }: ManufacturerQuery) => {
             {warehouse.name}
           </Link>
         ))}
-        DisplayUser
       </div>
     </div>
   )

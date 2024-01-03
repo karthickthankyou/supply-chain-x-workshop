@@ -22,29 +22,18 @@ export const DisplayUser = async ({
 
   return (
     <div className={className}>
-      {session?.user?.image ? (
-        <Image
-          className={cn(
-            'w-16 h-16 rounded-full aspect-square',
-            sizeCls,
-            roundedCls,
-          )}
-          width={600}
-          height={600}
-          src={session?.user?.image || ''}
-          alt={''}
-        />
-      ) : (
-        <div
-          className={cn(
-            'flex items-center aspect-square justify-center flex-shrink-0 text-3xl font-semibold border-2 border-black',
-            sizeCls,
-            roundedCls,
-          )}
-        >
-          {session?.user?.name?.charAt(0)}
-        </div>
-      )}
+      <Image
+        className={cn(
+          'rounded-full aspect-square object-cover shadow-lg',
+          sizeCls,
+          roundedCls,
+        )}
+        width={600}
+        height={600}
+        src={session?.user?.image || '/no-image.jpeg'}
+        alt={''}
+      />
+
       <div className={`text-xl font-light capitalize mt-2`}>
         {session?.user?.name}
       </div>
