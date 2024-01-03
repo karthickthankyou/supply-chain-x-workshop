@@ -21,6 +21,7 @@
     "react": "^18.2.0"
   },
   "dependencies": {
+    "firebase": "^10.7.1",
     "rxjs": "^7.2.0"
   }
 }
