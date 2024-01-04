@@ -36,9 +36,29 @@ export class WarehousesResolver {
     return this.warehousesService.create(args)
   }
 
+  @AllowAuthenticated('admin')
   @Query(() => [Warehouse], { name: 'warehouses' })
   findAll(@Args() args: FindManyWarehouseArgs) {
     return this.warehousesService.findAll(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => [Warehouse], { name: 'myWarehouses' })
+  myWarehouses(
+    @Args() args: FindManyWarehouseArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    return this.warehousesService.findAll({
+      ...args,
+      where: {
+        ...args.where,
+        OR: [
+          { manufacturerId: { equals: user.uid } },
+          { distributorId: { equals: user.uid } },
+          { retailerId: { equals: user.uid } },
+        ],
+      },
+    })
   }
 
   @Query(() => Warehouse, { name: 'warehouse' })

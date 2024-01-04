@@ -29,17 +29,17 @@ export class WarehousesService {
         description,
         location: { create: address },
         ...(manufacturerId && {
-          manufacturer: {
+          Manufacturer: {
             connect: { uid: manufacturerId },
           },
         }),
         ...(distributorId && {
-          distributor: {
+          Distributor: {
             connect: { uid: distributorId },
           },
         }),
         ...(retailerId && {
-          retailer: {
+          Retailer: {
             connect: { uid: retailerId },
           },
         }),
