@@ -18,6 +18,9 @@ import { Product } from 'src/models/products/graphql/entity/product.entity'
 import { PrismaService } from 'src/common/prisma/prisma.service'
 import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
 import { User } from 'src/models/users/graphql/entity/user.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from '@foundation/util/types'
+import { checkRowLevelPermission } from 'src/common/auth/util'
 
 @Resolver(() => Manufacturer)
 export class ManufacturersResolver {
@@ -26,10 +29,13 @@ export class ManufacturersResolver {
     private readonly prisma: PrismaService,
   ) {}
 
+  @AllowAuthenticated()
   @Mutation(() => Manufacturer)
   createManufacturer(
     @Args('createManufacturerInput') args: CreateManufacturerInput,
+    @GetUser() user: GetUserType,
   ) {
+    checkRowLevelPermission(user, args.uid)
     return this.manufacturersService.create(args)
   }
 

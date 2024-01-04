@@ -53,27 +53,28 @@ mutation registerWithCredentials(
   }
 }
 
-query myItems(
-  $skip: Int
-  $take: Int
-  $orderBy: [ItemOrderByWithRelationInput!]
-  $where: ItemWhereInput
-) {
-  myItems(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
-    createdAt
-    id
-    name
+query manufacturer($where: ManufacturerWhereUniqueInput!) {
+  manufacturer(where: $where) {
+    uid
     user {
+      name
+      image
+    }
+    products {
+      id
+      name
+    }
+    warehouses {
+      id
       name
     }
   }
 }
 
-mutation createItem($createItemInput: CreateItemInput!) {
-  createItem(createItemInput: $createItemInput) {
-    name
-    id
-    createdAt
+mutation createManufacturer(
+  $createManufacturerInput: CreateManufacturerInput!
+) {
+  createManufacturer(createManufacturerInput: $createManufacturerInput) {
     uid
   }
 }
