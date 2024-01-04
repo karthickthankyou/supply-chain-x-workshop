@@ -5,6 +5,7 @@ import {
   namedOperations,
 } from '@foundation/network/src/queries/generated'
 import { redirect } from 'next/navigation'
+import { ManufacturerDashboard } from '@foundation/ui/src/components/organisms/ManufacturerDashboard'
 
 export default async function ManufacturerPage() {
   const session = await getAuth()
@@ -22,5 +23,9 @@ export default async function ManufacturerPage() {
     },
   })
 
-  return <div>Hello from page.</div>
+  if (!data?.manufacturer) {
+    return <div>Manufacturer not found.</div>
+  }
+
+  return <ManufacturerDashboard manufacturer={data.manufacturer} />
 }

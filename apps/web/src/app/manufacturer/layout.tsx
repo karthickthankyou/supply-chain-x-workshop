@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
 import { CreateManufacturerAccount } from '@foundation/ui/src/components/organisms/CreateManufacturerAccount'
+import { ManufacturerMenu } from '@foundation/ui/src/components/organisms/ManufacturerMenu'
 
 export default async function ManufacturerLayout({
   children,
@@ -33,5 +34,15 @@ export default async function ManufacturerLayout({
     return <CreateManufacturerAccount uid={session.user.uid} />
   }
 
-  return <div>Hello from layout {children}</div>
+  return (
+    <div className="flex mt-2 ">
+      <div className="hidden w-full max-w-xs min-w-min sm:block">
+        <ManufacturerMenu manufacturer={data.manufacturer} />
+      </div>
+
+      <div className="flex-grow ">
+        <div className="p-4 bg-gray-100">{children}</div>
+      </div>
+    </div>
+  )
 }
