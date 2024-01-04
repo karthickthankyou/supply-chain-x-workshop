@@ -15,6 +15,8 @@ import { PrismaService } from 'src/common/prisma/prisma.service'
 import { Manufacturer } from 'src/models/manufacturers/graphql/entity/manufacturer.entity'
 import { Inventory } from 'src/models/inventories/graphql/entity/inventory.entity'
 import { Transaction } from 'src/models/transactions/graphql/entity/transaction.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from '@foundation/util/types'
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -28,9 +30,19 @@ export class ProductsResolver {
     return this.productsService.create(args)
   }
 
+  @AllowAuthenticated('admin')
   @Query(() => [Product], { name: 'products' })
   findAll(@Args() args: FindManyProductArgs) {
     return this.productsService.findAll(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => [Product], { name: 'myProducts' })
+  myProducts(@Args() args: FindManyProductArgs, @GetUser() user: GetUserType) {
+    return this.productsService.findAll({
+      ...args,
+      where: { ...args.where, manufacturerId: { equals: user.uid } },
+    })
   }
 
   @Query(() => Product, { name: 'product' })

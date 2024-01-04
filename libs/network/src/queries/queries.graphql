@@ -140,3 +140,24 @@ query myWarehouses(
     ...WarehouseDetails
   }
 }
+
+query myProducts(
+  $skip: Int
+  $take: Int
+  $orderBy: [ProductOrderByWithRelationInput!]
+  $where: ProductWhereInput
+) {
+  myProducts(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    name
+    image
+    createdAt
+    description
+  }
+}
+
+mutation createProduct($createProductInput: CreateProductInput!) {
+  createProduct(createProductInput: $createProductInput) {
+    id
+  }
+}

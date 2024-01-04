@@ -1,1 +1,1 @@
-export { useFormContext, useWatch } from 'react-hook-form'
+export { useFormContext, useWatch, Controller } from 'react-hook-form'
