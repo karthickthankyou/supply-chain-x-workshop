@@ -1,14 +1,13 @@
 import { getAuth } from '@foundation/network/src/auth/authOptions'
-import { fetchGraphqlStatic } from '@foundation/network/src/fetch'
 import {
-  ManufacturerDocument,
+  DistributorDocument,
   namedOperations,
 } from '@foundation/network/src/queries/generated'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { ReactNode } from 'react'
+import { fetchGraphQLServer } from '@foundation/network/src/fetch/server'
 import { CreateRoleAccount } from '@foundation/ui/src/components/organisms/CreateRoleAccount'
-import { ManufacturerMenu } from '@foundation/ui/src/components/organisms/ManufacturerMenu'
+import { DistributorMenu } from '@foundation/ui/src/components/organisms/DistributorMenu'
 
 export default async function ManufacturerLayout({
   children,
@@ -20,28 +19,28 @@ export default async function ManufacturerLayout({
     redirect('/signIn')
   }
 
-  const { data, error } = await fetchGraphqlStatic({
-    document: ManufacturerDocument,
+  const { data, error } = await fetchGraphQLServer({
+    document: DistributorDocument,
     variables: { where: { uid: session.user.uid } },
     config: {
+      cache: 'no-cache',
       next: {
-        tags: [namedOperations.Query.manufacturer],
+        tags: [namedOperations.Query.distributor],
       },
     },
   })
 
-  if (!data?.manufacturer) {
-    return <CreateRoleAccount role="manufacturer" uid={session.user.uid} />
+  if (!data?.distributor) {
+    return <CreateRoleAccount role="distributor" uid={session.user.uid} />
   }
 
   return (
-    <div className="flex mt-2 ">
+    <div className="flex gap-2">
       <div className="hidden w-full max-w-xs min-w-min sm:block">
-        <ManufacturerMenu manufacturer={data.manufacturer} />
+        <DistributorMenu distributor={data.distributor} />
       </div>
-
       <div className="flex-grow ">
-        <div className="p-4 bg-gray-100">{children}</div>
+        <div className="p-4 bg-gray-100 rounded-lg">{children}</div>
       </div>
     </div>
   )

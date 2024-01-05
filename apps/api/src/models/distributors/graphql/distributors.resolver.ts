@@ -37,7 +37,7 @@ export class DistributorsResolver {
     return this.distributorsService.findAll(args)
   }
 
-  @Query(() => Distributor, { name: 'distributor' })
+  @Query(() => Distributor, { name: 'distributor', nullable: true })
   findOne(@Args() args: FindUniqueDistributorArgs) {
     return this.distributorsService.findOne(args)
   }

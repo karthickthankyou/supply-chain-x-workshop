@@ -22,8 +22,17 @@ export const TransferGoods = ({
   warehouseId: number
   inventory: WarehouseDetailsFragment['inventories'][0]
 }) => {
-  const { register, handleSubmit, reset } = useFormTransferInventory()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useFormTransferInventory()
   const [open, setOpen] = useState(false)
+
+  const data = watch()
+  console.log('data , errors', data, errors)
 
   return (
     <SimpleDialog
@@ -61,26 +70,30 @@ export const TransferGoods = ({
           },
         )}
       >
-        <Label title="Warehouse ID (readonly)">
+        <Label
+          title="Warehouse ID (readonly)"
+          error={errors.fromWarehouseId?.message}
+        >
           <Input
             {...register('fromWarehouseId', { valueAsNumber: true })}
             readOnly
             value={warehouseId}
-            disabled
           />
         </Label>
-        <Label title="Product ID (readonly)">
+        <Label title="Product ID (readonly)" error={errors.productId?.message}>
           <Input
             {...register('productId', { valueAsNumber: true })}
             readOnly
-            disabled
             value={inventory.product.id}
           />
         </Label>
-        <Label title="Target Warehouse ID">
+        <Label
+          title="Target Warehouse ID"
+          error={errors.toWarehouseId?.message}
+        >
           <Input {...register('toWarehouseId', { valueAsNumber: true })} />
         </Label>
-        <Label title="Quantity">
+        <Label title="Quantity" error={errors.quantity?.message}>
           <Input {...register('quantity', { valueAsNumber: true })} />
         </Label>
         <Button type="submit">Submit</Button>
