@@ -1,4 +1,4 @@
-import { MyWarehousesQuery } from '@foundation/network/src/queries/generated'
+import { WarehouseDetailsFragment } from '@foundation/network/src/queries/generated'
 
 import { format } from 'date-fns'
 
@@ -8,7 +8,7 @@ import { MapLink } from '../molecules/MapLink'
 export const WarehouseCard = ({
   warehouse,
 }: {
-  warehouse: MyWarehousesQuery['myWarehouses'][0]
+  warehouse: WarehouseDetailsFragment
 }) => {
   return (
     <div className="flex flex-col gap-2">

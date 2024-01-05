@@ -18,6 +18,8 @@ import { PrismaService } from 'src/common/prisma/prisma.service'
 import { Warehouse } from 'src/models/warehouses/graphql/entity/warehouse.entity'
 import { Product } from 'src/models/products/graphql/entity/product.entity'
 import { BadRequestException } from '@nestjs/common'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from '@foundation/util/types'
 
 @Resolver(() => Inventory)
 export class InventoriesResolver {
@@ -29,6 +31,40 @@ export class InventoriesResolver {
   @Mutation(() => Inventory)
   createInventory(@Args('createInventoryInput') args: CreateInventoryInput) {
     return this.inventoriesService.create(args)
+  }
+
+  @AllowAuthenticated()
+  @Mutation(() => Inventory)
+  async transferInventory(
+    @Args('fromWarehouseId') fromWarehouseId: number,
+    @Args('toWarehouseId') toWarehouseId: number,
+    @Args('productId') productId: number,
+    @Args('quantity') quantity: number,
+    @GetUser() user: GetUserType,
+  ): Promise<Inventory | null> {
+    return this.inventoriesService.transferInventory(
+      fromWarehouseId,
+      toWarehouseId,
+      productId,
+      quantity,
+      user.uid,
+    )
+  }
+
+  @AllowAuthenticated()
+  @Mutation(() => Inventory)
+  async reduceInventory(
+    @Args('warehouseId') warehouseId: number,
+    @Args('productId') productId: number,
+    @Args('quantity') quantity: number,
+    @GetUser() user: GetUserType,
+  ): Promise<Inventory | null> {
+    return this.inventoriesService.reduceInventory({
+      uid: user.uid,
+      warehouseId,
+      productId,
+      quantity,
+    })
   }
 
   @Query(() => [Inventory], { name: 'inventories' })

@@ -621,6 +621,8 @@ type Mutation {
   updateLocation(updateLocationInput: UpdateLocationInput!): Location!
   removeLocation(where: LocationWhereUniqueInput!): Location!
   createInventory(createInventoryInput: CreateInventoryInput!): Inventory!
+  transferInventory(fromWarehouseId: Int!, toWarehouseId: Int!, productId: Int!, quantity: Int!): Inventory!
+  reduceInventory(warehouseId: Int!, productId: Int!, quantity: Int!): Inventory!
   updateInventory(updateInventoryInput: UpdateInventoryInput!): Inventory!
   removeInventory(where: InventoryWhereUniqueInput!): Inventory!
   createTransaction(createTransactionInput: CreateTransactionInput!): Transaction!

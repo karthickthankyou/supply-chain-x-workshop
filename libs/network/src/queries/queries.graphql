@@ -141,6 +141,12 @@ query myWarehouses(
   }
 }
 
+query warehouse($where: WarehouseWhereUniqueInput!) {
+  warehouse(where: $where) {
+    ...WarehouseDetails
+  }
+}
+
 query myProducts(
   $skip: Int
   $take: Int
@@ -158,6 +164,42 @@ query myProducts(
 
 mutation createProduct($createProductInput: CreateProductInput!) {
   createProduct(createProductInput: $createProductInput) {
+    id
+  }
+}
+
+mutation createInventory($createInventoryInput: CreateInventoryInput!) {
+  createInventory(createInventoryInput: $createInventoryInput) {
+    id
+  }
+}
+
+mutation transferInventory(
+  $fromWarehouseId: Int!
+  $toWarehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  transferInventory(
+    fromWarehouseId: $fromWarehouseId
+    toWarehouseId: $toWarehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
+    id
+  }
+}
+
+mutation reduceInventory(
+  $warehouseId: Int!
+  $productId: Int!
+  $quantity: Int!
+) {
+  reduceInventory(
+    warehouseId: $warehouseId
+    productId: $productId
+    quantity: $quantity
+  ) {
     id
   }
 }
