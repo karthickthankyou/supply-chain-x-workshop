@@ -22,6 +22,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { revalidate } from '@foundation/network/src/actions/revalidate'
 import { Label } from '../atoms/label'
+import { SearchLocation } from '../organisms/Map/SearchLocation'
 
 interface ICreateWarehouse {
   warehouseRole: {
@@ -44,6 +45,7 @@ const CreateWarehouseContent = ({
     handleSubmit,
     watch,
     formState: { errors },
+    setValue,
   } = useFormContext<FormTypeCreateWarehouse>()
 
   const data = watch()
@@ -96,6 +98,14 @@ const CreateWarehouseContent = ({
         <MapMarker />
         <Panel position="right-center">
           <DefaultZoomControls />
+        </Panel>
+        <Panel position="left-top">
+          <SearchLocation
+            onLocationChange={(location: ViewState) => {
+              setValue('address.latitude', location.latitude)
+              setValue('address.longitude', location.longitude)
+            }}
+          />
         </Panel>
       </Map>
     </div>
