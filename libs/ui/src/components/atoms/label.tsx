@@ -22,7 +22,7 @@ const Label = React.forwardRef<
     <div className="mb-2">{title}</div>
     {children}
     {error ? (
-      <div className="mt-2 text-sm font-normal text-red-500">{error}</div>
+      <div className="mt-1 mb-2 text-xs font-normal text-red-500">{error}</div>
     ) : null}
   </LabelPrimitive.Root>
 ))

@@ -17,6 +17,7 @@ import { Inventory } from 'src/models/inventories/graphql/entity/inventory.entit
 import { Transaction } from 'src/models/transactions/graphql/entity/transaction.entity'
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
 import { GetUserType } from '@foundation/util/types'
+import { checkRowLevelPermission } from 'src/common/auth/util'
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -45,9 +46,15 @@ export class ProductsResolver {
     })
   }
 
+  @AllowAuthenticated()
   @Query(() => Product, { name: 'product' })
-  findOne(@Args() args: FindUniqueProductArgs) {
-    return this.productsService.findOne(args)
+  async findOne(
+    @Args() args: FindUniqueProductArgs,
+    @GetUser() user: GetUserType,
+  ) {
+    const product = await this.productsService.findOne(args)
+    checkRowLevelPermission(user, product.manufacturerId)
+    return product
   }
 
   @Mutation(() => Product)

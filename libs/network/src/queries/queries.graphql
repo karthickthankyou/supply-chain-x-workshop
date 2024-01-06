@@ -243,3 +243,52 @@ mutation createRetailer($createRetailerInput: CreateRetailerInput!) {
     uid
   }
 }
+
+query product($where: ProductWhereUniqueInput!) {
+  product(where: $where) {
+    name
+    image
+    description
+    createdAt
+    transactions {
+      id
+      quantity
+      toWarehouse {
+        id
+        location {
+          latitude
+          longitude
+          id
+        }
+      }
+      fromWarehouse {
+        id
+        location {
+          latitude
+          longitude
+          id
+        }
+      }
+    }
+    inventories {
+      id
+      warehouse {
+        manufacturer {
+          uid
+        }
+        distributor {
+          uid
+        }
+        retailer {
+          uid
+        }
+        location {
+          latitude
+          longitude
+          id
+        }
+      }
+      quantity
+    }
+  }
+}

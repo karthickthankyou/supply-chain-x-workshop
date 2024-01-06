@@ -19,11 +19,11 @@ export const formSchemaCreateItem = z.object({
 export const addressSchema = z.object({
   latitude: z.number(),
   longitude: z.number(),
-  address: z.string(),
+  address: z.string().min(2),
 })
 
 export const formSchemaCreateWarehouse = z.object({
-  name: z.string(),
+  name: z.string().min(2),
   description: z.string().optional(),
   manufacturerId: z.string().optional(),
   distributorId: z.string().optional(),

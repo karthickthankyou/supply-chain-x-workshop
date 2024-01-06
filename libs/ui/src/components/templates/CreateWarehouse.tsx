@@ -21,6 +21,7 @@ import {
 } from '@foundation/network/src/queries/generated'
 import { useRouter } from 'next/navigation'
 import { revalidate } from '@foundation/network/src/actions/revalidate'
+import { Label } from '../atoms/label'
 
 interface ICreateWarehouse {
   warehouseRole: {
@@ -74,15 +75,21 @@ const CreateWarehouseContent = ({
           }
         })}
       >
-        <Input {...register('name')} placeholder="Warehouse name" />
-        <Textarea
-          {...register('description')}
-          placeholder="Warehouse description"
-        />
-        <Textarea
-          {...register('address.address')}
-          placeholder="Warehouse address"
-        />
+        <Label title="Name" error={errors.name?.message}>
+          <Input {...register('name')} placeholder="Warehouse name" />
+        </Label>
+        <Label title="Description" error={errors.description?.message}>
+          <Textarea
+            {...register('description')}
+            placeholder="Warehouse description"
+          />
+        </Label>
+        <Label title="Address" error={errors.address?.address?.message}>
+          <Textarea
+            {...register('address.address')}
+            placeholder="Warehouse address"
+          />
+        </Label>
         <Button type="submit">Create warehouse</Button>
       </form>
       <Map initialViewState={initialViewState}>

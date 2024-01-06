@@ -11,7 +11,8 @@
     "lint": "pnpm exec nx run-many --target=lint",
     "tsc": "pnpm exec nx run-many --target=tsc",
     "validate": "pnpm format:write && pnpm tsc && pnpm lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cloc": "npx cloc --exclude-dir=node_modules,dist,build,pnpm-lock.yaml,package.json,package-lock.json,@generated,generated,.next,.nx ."
   },
   "keywords": [],
   "author": "",
